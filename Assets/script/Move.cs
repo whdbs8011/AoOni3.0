@@ -13,16 +13,15 @@ public class Move : MonoBehaviour
     private float v;
     private bool isHorizonMove;
     
-    private Animation ani;
+    Animator ani;
+    private static readonly int IsChange = Animator.StringToHash("isChange");
+    private static readonly int HAxisRaw = Animator.StringToHash("hAxisRaw");
+    private static readonly int VAxisRaw = Animator.StringToHash("vAxisRaw");
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-    }
-
-    void Start()
-    {
-        ani = GetComponent<Animation>();
+        ani = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -46,6 +45,23 @@ public class Move : MonoBehaviour
         {
             isHorizonMove = h != 0;
         }
+        //anim
+        
+        if (ani.GetInteger("hAxisRaw") != h)
+        {
+            ani.SetBool("isChange", true);
+            ani.SetInteger("hAxisRaw", (int)h);
+        }
+        else if (ani.GetInteger("vAxisRaw") != v)
+        {
+            ani.SetBool("isChange",true);
+            ani.SetInteger("vAxisRaw",(int)v);
+        }
+        else
+        {
+            ani.SetBool("isChange", false);
+        }
+        
     }
 
     private void FixedUpdate()
